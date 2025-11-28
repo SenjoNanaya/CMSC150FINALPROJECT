@@ -4,8 +4,6 @@
 **CMSC 150 Final Project**  
 **Academic Year 2025-2026, 1st Semester**
 
-Special thanks to Claude for helping in writing and creating the diagrams + formulas + tables for this documentation
-
 ---
 
 ## Table of Contents
@@ -54,7 +52,6 @@ Greenvale must reduce its pollution footprint across ten priority pollutants:
 
 The system uses a **client-server architecture**:
 
-Credits to Claude for generating this diagram
 ```
 ┌─────────────────┐         HTTP/JSON          ┌─────────────────┐
 │   Streamlit     │ ─────────────────────────> │   R Plumber     │
@@ -133,7 +130,6 @@ https://cmsc150finalproject-h3brbqgtlfdlqxqpbcz7nt.streamlit.app
 
 The application is fully cloud-hosted:
 
-Credits to Claude for generating this diagram
 ```
 ┌──────────────────────────────────────────────┐
 │  Your Browser                                 │
@@ -179,13 +175,7 @@ Credits to Claude for generating this diagram
 
 ## 4. User Manual
 
-### 4.1 Starting the Application
-
-1. Run the command: `streamlit run project_gui.py`
-2. Your default browser will open automatically
-3. You'll see the main interface with project selection table
-
-### 4.2 Selecting Projects
+### 4.1 Selecting Projects
 
 #### Method 1: Manual Selection via Table
 
@@ -210,7 +200,7 @@ The main interface displays an **interactive data table** with all 30 projects:
 - Click to deselect all projects
 - Clears your current selection
 
-### 4.3 Understanding the Data Table
+### 4.2 Understanding the Data Table
 
 Each row shows:
 
@@ -222,7 +212,7 @@ Each row shows:
 | Cost ($) | Cost per unit in dollars | $1,400 |
 | CO2...N2O | Pollutant reductions per unit | 20, 0.9, 0.4... |
 
-### 4.4 Running the Optimization
+### 4.3 Running the Optimization
 
 1. **Select your projects** using any method above
 
@@ -239,14 +229,14 @@ Each row shows:
    - Typically takes 2-5 seconds for 30 projects
    - More projects = slightly longer processing time
 
-### 4.5 Understanding the Results
+### 4.4 Understanding the Results
 
 #### Debug Information
 
-First, you'll see validation data:
+First, you'll see validation data: (Initiall used for debugging but it's useful for the user figure out which projects they're over the cap)
 
 ```
-✅ Problem appears theoretically feasible
+Problem appears theoretically feasible
 
 Pollutant CO2: Target=1000, Max possible=11844.00
 Pollutant NOx: Target=35, Max possible=340.00
@@ -376,7 +366,7 @@ The selected projects cannot meet all pollution reduction targets.
 
 ### 5.1 Problem Formulation
 
-**Primal Problem (Minimization):**
+**Minimization:**
 
 Minimize:
 ```
@@ -389,9 +379,9 @@ Subject to:
 0 ≤ x_i ≤ 20  for all projects i
 ```
 
-**Dual Problem (Maximization):**
+**Converting to Maximization**
 
-The system transforms the primal to its dual:
+The system transforms the minimization problem to its dual based on the Laboratory handout:
 
 Maximize:
 ```
@@ -409,8 +399,6 @@ Where:
 - `u_i` = dual variables for upper bound constraints
 
 ### 5.2 Algorithm: Simplex Method
-
-**Implementation follows CMSC 150 curriculum:**
 
 1. **Dual Transformation:**
    - Converts minimization with ≥ constraints to maximization with ≤ constraints
@@ -535,7 +523,7 @@ Could not reach R backend. Make sure plumber is running...
 ```
 
 **Causes:**
-1. Render.com backend is sleeping (first request)
+1. Render.com backend is sleeping (first request, usually the cpu spins down after awhile of inactivity)
 2. Internet connection lost
 3. Backend temporarily unavailable
 
@@ -767,9 +755,9 @@ If you want to modify or run locally:
    
 **Application Access:**
 
-🌐 **Live URL**: https://cmsc150finalproject-h3brbqgtlfdlqxqpbcz7nt.streamlit.app
+**Live URL**: https://cmsc150finalproject-h3brbqgtlfdlqxqpbcz7nt.streamlit.app
 
-📧 **Feedback**: Use the feedback widget in the app (☰ menu → Report a bug)
+**Feedback**: Use the feedback widget in the app (☰ menu → Report a bug)
 
 ---
 
@@ -778,6 +766,7 @@ If you want to modify or run locally:
 **Developed for:** CMSC 150 - Numerical and Symbolic Computation  
 **Institution:** University of the Philippines Los Baños  
 **Academic Year:** 2025-2026, 1st Semester  
+**Special thanks to Claude for helping in writing and creating the diagrams + formulas + tables for this documentation**
 
 **Technologies Used:**
 - Python 3.x with Streamlit
