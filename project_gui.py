@@ -243,9 +243,67 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                 
                 # check for error/infeasibility DEBUGG
                 if res.get("infeasible") == True or ("error" in res and res["error"]):
-                    st.error("### The problem is infeasible or unbounded.")
+                    st.error("### ❌ The problem is infeasible or unbounded.")
+                    st.markdown("""
+                    The selected projects cannot meet all pollution reduction targets.
+                    Try selecting additional projects or different combinations.
+                    """)
                     if "error" in res:
-                        st.error(f"Details: {res['error']}")
+                        st.error(f"**Error Details:** {res['error']}")
+                    
+                    # Show what was attempted
+                    st.markdown("---")
+                    st.markdown("### 📥 Your Input")
+                    if len(selected) == 30:
+                        st.markdown("You selected **all** the possible mitigation projects")
+                    else:
+                        st.markdown(f"You selected **{len(selected)} projects**:")
+                        project_names = [df_proj[df_proj['id'] == pid]['projectname'].values[0] for pid in sorted(selected)]
+                        for name in project_names:
+                            st.markdown(f"• {name}")
+                    
+                    # SHOW ITERATIONS EVEN ON FAILURE (debug)
+                    st.markdown("---")
+                    st.markdown("### 🔄 Simplex Tableau Iterations (Before Failure)")
+                    st.info("💡 The solver detected infeasibility or unboundedness and stopped. Below are the iterations completed before detection.")
+                    
+                    if "iterations" in res and res["iterations"]:
+                        num_iterations = len(res["iterations"])
+                        st.write(f"**Total iterations before stopping:** {num_iterations}")
+                        
+                        for iter_data in res["iterations"]:
+                            raw_iter = iter_data.get("iteration", 0)
+                            if isinstance(raw_iter, list):
+                                iter_num = raw_iter[0]
+                            else:
+                                iter_num = raw_iter
+                            
+                            # expand by default the first and last
+                            is_first = iter_num == 0
+                            is_last = iter_num == (num_iterations - 1)
+                            
+                            with st.expander(
+                                f"Iteration {iter_num}" + 
+                                (" (Initial)" if is_first else "") +
+                                ("(Where it stopped)" if is_last else ""),
+                                expanded=(is_first or is_last)
+                            ):
+                                if iter_num > 0:
+                                    st.markdown(f"""
+                                    **Pivot Row:** {iter_data.get('pivotRow', 'N/A')}  
+                                    **Pivot Column:** {iter_data.get('pivotCol', 'N/A')}  
+                                    **Pivot Element:** {iter_data.get('pivotElement', 'N/A')}
+                                    """)
+                                st.dataframe(pd.DataFrame(iter_data["tableau"]))
+                    else:
+                        st.warning("No iteration data available. The problem was detected as infeasible during setup.")
+                    
+                    # Show final tableau state at failure
+                    if "finalTableau" in res:
+                        st.markdown("---")
+                        with st.expander("📋 Final Tableau State (At Failure Point)", expanded=False):
+                            st.caption("This is the tableau when infeasibility/unboundedness was detected")
+                            st.dataframe(pd.DataFrame(res["finalTableau"]))
                 else:
                     st.success("### Optimization Complete!")
                     
