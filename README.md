@@ -82,13 +82,13 @@ Credits to Claude for generating this diagram
 
 ### 2.3 Key Features
 
-✅ Interactive project selection via editable table  
-✅ Select All / Reset buttons for quick selection  
-✅ Real-time feasibility validation  
-✅ Dual problem formulation (following CMSC 150 curriculum)  
-✅ Complete iteration history display  
-✅ Cost breakdown by project  
-✅ Responsive web interface  
+Interactive project selection via editable table  
+Select All / Reset buttons for quick selection  
+Real-time feasibility validation  
+Dual problem formulation (following CMSC 150 curriculum)  
+Complete iteration history display  
+Cost breakdown by project  
+Responsive web interface  
 
 ---
 
@@ -154,11 +154,11 @@ Credits to Claude for generating this diagram
 ```
 
 **Key Benefits:**
-- ✅ Zero installation required
-- ✅ Access from any device
-- ✅ Automatic updates
-- ✅ Always available (24/7)
-- ✅ No local resources used
+- Zero installation required
+- Access from any device
+- Automatic updates
+- Always available (24/7)
+- No local resources used
 
 ### 3.4 First-Time Setup (Optional)
 
