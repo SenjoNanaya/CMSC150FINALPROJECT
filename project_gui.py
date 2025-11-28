@@ -240,7 +240,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                 st.error(f"Backend error: {r.status_code} {r.text}")
             else:
                 res = r.json()
-                
+                # this should work?
                 # check for error/infeasibility DEBUGG
                 if res.get("infeasible") == True or ("error" in res and res["error"]):
                     st.error("### ❌ The problem is infeasible or unbounded.")
