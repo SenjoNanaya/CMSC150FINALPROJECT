@@ -1,6 +1,8 @@
 # City Pollution Reduction Planner
 ## Complete Documentation & User Manual
 
+**Galvin M. Gonzales**
+**B-3L**
 **CMSC 150 Final Project**  
 **Academic Year 2025-2026, 1st Semester**
 
