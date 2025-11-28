@@ -251,7 +251,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     if "error" in res:
                         st.error(f"**Error Details:** {res['error']}")
                     
-                    # Show what was attempted
+                    # show what should be
                     st.markdown("---")
                     st.markdown("### 📥 Your Input")
                     if len(selected) == 30:
@@ -297,8 +297,8 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                                 st.dataframe(pd.DataFrame(iter_data["tableau"]))
                     else:
                         st.warning("No iteration data available. The problem was detected as infeasible during setup.")
-                    
-                    # Show final tableau state at failure
+
+                    # final tableau                    
                     if "finalTableau" in res:
                         st.markdown("---")
                         with st.expander("📋 Final Tableau State (At Failure Point)", expanded=False):
