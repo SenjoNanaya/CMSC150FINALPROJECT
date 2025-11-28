@@ -1,6 +1,6 @@
 # City Pollution Reduction Planner
 ## Complete Documentation & User Manual
-# Special thanks to Claude for helping in writing and creating the diagrams + formulas + tables for this documentation
+### Special thanks to Claude for helping in writing and creating the diagrams + formulas + tables for this documentation
 
 **CMSC 150 Final Project**  
 **Academic Year 2025-2026, 1st Semester**
