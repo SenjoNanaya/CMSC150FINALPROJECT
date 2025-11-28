@@ -353,7 +353,8 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     st.markdown("---")
                     with st.expander("Final Tableau", expanded=False):
                         st.dataframe(pd.DataFrame(res["finalTableau"]))
-                        
+
+                    # additionally I decided to remove the all variables portion of the solution as it was too much of a hassle to label them all
         except requests.exceptions.RequestException as e:
             st.error("Could not reach R backend. Make sure plumber is running at https://cmsc150finalproject.onrender.com/simplex")
             st.error(f"Error details: {str(e)}")
