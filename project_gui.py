@@ -237,6 +237,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                             timeout=30)
             
             if r.status_code != 200:
+                res = r.json()
                 st.error(f"Backend error: {r.status_code} {r.text}")
                 st.error("### The problem is infeasible or unbounded.")
                 st.markdown("""
