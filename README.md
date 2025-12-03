@@ -741,7 +741,7 @@ If you want to modify or run locally:
 **External Resources:**
 - Streamlit Documentation: https://docs.streamlit.io
 - Plumber Documentation: https://www.rplumber.io
-- Linear Programming Theory: Chapra & Canale, Numerical Methods for Engineers
+- CMSC 150 HANDOUT SIMPLEX METHOD
 
 ---
 
