@@ -107,6 +107,8 @@ Simplex <- function(tableau, isMax = TRUE) {
     }
 
     # Z value (negate back if minimization)
+    # ^ this does not matter anymore considering that the extra logic for minimization that used to be here has been moved to the tableau construction
+    # in project_gui.py
     Z <- tableau[nrows, rhs_col]
     
     # NO NEED ANYMORE BECAUSE IT'S ALWAYS MINIMIZATION (I had so many issues realizing that I was double negating)

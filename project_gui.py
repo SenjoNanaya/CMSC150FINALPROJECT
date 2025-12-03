@@ -53,6 +53,7 @@ if 'selected_projects' not in st.session_state:
 if 'select_all_flag' not in st.session_state:
     st.session_state.select_all_flag = False
 
+# dataframe initialization
 proj_rows = []
 for p in PROJECTS:
     proj_rows.append({
@@ -67,7 +68,6 @@ st.markdown("---")
 st.subheader("Select Mitigation Projects")
 st.markdown("Use the table below to select projects. Click column headers to sort by Cost or Efficiency.")
 
-# initialize table, very familiar with pandas
 # using a dataframe in session state to hold the 'Selected' status
 if 'project_editor_df' not in st.session_state:
     # create a copy of the base data
@@ -190,10 +190,6 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
         st.write("### Converting to Dual Problem (Maximization)")
         
         # Primal problem construction
-        # Dual: Maximize W = b*y - 20*u
-        # Standard Simplex Tableau for Max W: (Row 0) Z - b*y + 20*u = 0
-        # need coefficients: -b for y, +20 for u. (just like how you'd construct the initial tableau)
-        
         A_transpose = A_np.T
         dual_decision_vars = m + n
         dual_constraints = n
@@ -228,6 +224,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
         st.write(f"Dual tableau: {len(tableau)} rows × {len(tableau[0])} columns")
         
         # set isMax=True so R does NOT flip our signs since the signs are already flipped (did not bother to remove this bool)
+        # ^this doesn't matter anymore since we convert the primal problem to the dual problem we're always going to be doing maximization.
         payload = {"tableau": tableau, "isMax": True}
         
         try:
@@ -247,9 +244,9 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                 if "error" in res:
                     st.error(f"**Error Details:** {res['error']}")
                 
-                # show what should be
+                # show what should be input
                 st.markdown("---")
-                st.markdown("### 📥 Your Input")
+                st.markdown("### Your Input")
                 if len(selected) == 30:
                     st.markdown("You selected **all** the possible mitigation projects")
                 else:
@@ -260,7 +257,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                 
                 # SHOW ITERATIONS EVEN ON FAILURE (debug)
                 st.markdown("---")
-                st.markdown("### 🔄 Simplex Tableau Iterations (Before Failure)")
+                st.markdown("### Simplex Tableau Iterations (Before Failure)")
                 st.info("The solver detected infeasibility or unboundedness and stopped. Below are the iterations completed before detection.")
                 
                 if "iterations" in res and res["iterations"]:
@@ -300,6 +297,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     with st.expander("Final Tableau State (At Failure Point)", expanded=False):
                         st.caption("This is the tableau when infeasibility/unboundedness was detected")
                         st.dataframe(pd.DataFrame(res["finalTableau"]))
+            # it would've been more sensible to make a separate function that I can call to at this point but I chose to just copy and paste at this point in time
             else:
                 res = r.json()
                 # check for error/infeasibility DEBUGG
@@ -312,7 +310,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     if "error" in res:
                         st.error(f"**Error Details:** {res['error']}")
                     
-                    # show what should be
+                    # show what should be input
                     st.markdown("---")
                     st.markdown("### Your Input")
                     if len(selected) == 30:
@@ -371,7 +369,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     finalTableau = res["finalTableau"]
                     if isinstance(finalTableau, list) and len(finalTableau) > 0 and isinstance(finalTableau[0], dict):
                         df_tableau = pd.DataFrame(finalTableau)
-                        # sort columns numerically (V1, V2...V10)
+                        # sort columns numerically (V1, V2... V10)
                         import re
                         def sort_key(col_name):
                             match = re.search(r'(\d+)', str(col_name))
@@ -393,7 +391,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
 
                     last_row = tableau_array[-1, :]
                     
-                    # primal values
+                    # primal values (part of the final solution)
                     slack_start_col = m + n
                     xvals = last_row[slack_start_col:slack_start_col + n].tolist()
                     
@@ -403,9 +401,9 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     st.write(f"Primal optimal cost: {optimal_cost:,.2f}")
                     st.write(f"Last row has {len(last_row)} elements")
                     st.write(f"Slack columns: {slack_start_col} to {slack_start_col + n - 1}")
-                    st.write(f"Primal x values (from dual slacks): {[round(x, 4) for x in xvals[:30]]}")
+                    st.write(f"Primal x values: {[round(x, 4) for x in xvals[:30]]}")
                     st.write(f"Dual Z: {res['Z']}")
-                    st.write(f"Primal optimal cost: {optimal_cost}")
+                    st.write(f"Primal optimal cost (from z): {optimal_cost}")
                     
                     # input section of the webpage
                     st.markdown("---")
@@ -429,7 +427,8 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     
                     breakdown = []
                     for i, xi in enumerate(xvals):
-                        if abs(xi) > 0.0001:  # Only show non-zero allocations
+                        # Only show non-zero allocations
+                        if abs(xi) > 0.0001:  
                             project = sel_df.iloc[i]["projectname"]
                             cost_per_unit = sel_df.iloc[i]["cost"]
                             total_cost_item = abs(xi) * cost_per_unit
