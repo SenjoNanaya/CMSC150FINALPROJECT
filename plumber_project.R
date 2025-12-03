@@ -33,7 +33,7 @@ Simplex <- function(tableau, isMax = TRUE) {
         tableau[nrows, varcols] <- -tableau[nrows, varcols]
     }
 
-    # storing initial tableau AFTER transformation since transposition must occur first
+    # storing initial tableau
     iterations[[1]] <- list(
         iteration = 0,
         tableau = round(tableau, 6),
@@ -47,7 +47,7 @@ Simplex <- function(tableau, isMax = TRUE) {
         # objective row excluding RHS
         lastRow <- tableau[nrows, -rhs_col]  
 
-        # check if all coefficients are non-negative (I had problems here)
+        # check if all coefficients are non-negative.
         if (all(lastRow >= -1e-10)) {
           cat("Optimal solution found (all objective coefficients non-negative)\n")
           break
@@ -108,10 +108,11 @@ Simplex <- function(tableau, isMax = TRUE) {
 
     # Z value (negate back if minimization)
     Z <- tableau[nrows, rhs_col]
+    
     # NO NEED ANYMORE BECAUSE IT'S ALWAYS MINIMIZATION (I had so many issues realizing that I was double negating)
-    if (!isMax) {
-        Z <- -Z  # Convert back to original minimization objective
-    }
+    #if (!isMax) {
+    #    Z <- -Z  # Convert back to original minimization objective
+    #}
 
     # number of constraints and decision variables
     n_constraints <- nrows - 1
@@ -140,16 +141,17 @@ Simplex <- function(tableau, isMax = TRUE) {
     x_vals <- if (n_decision > 0) var_solution[1:n_decision] else numeric(0)
     s_vals <- if (n_constraints > 0) var_solution[(n_decision+1):n_varcols] else numeric(0)
 
-    finalSolution <- c(x_vals, s_vals, Z)
-    names(finalSolution) <- c(
-        if (n_decision > 0) paste0("x", 1:n_decision) else character(0),
-        if (n_constraints > 0) paste0("s", 1:n_constraints) else character(0),
-        "Z"
-    )
+    # NO NEED ANYMORE SINCE I DECIDED TO NOT INCLUDE THIS ANYMORE SINCE IT WAS A HASSLE TO LABEL AND EXPLAIN THIS PORTION WHEN IT'S NOT NEEDED TO PROJECT SPECS
+    #finalSolution <- c(x_vals, s_vals, Z)
+    #names(finalSolution) <- c(
+    #    if (n_decision > 0) paste0("x", 1:n_decision) else character(0),
+    #    if (n_constraints > 0) paste0("s", 1:n_constraints) else character(0),
+    #    "Z"
+    #)
 
     return(list(
         finalTableau = round(tableau, 6),
-        finalSolution = round(finalSolution, 6),
+        #finalSolution = round(finalSolution, 6),
         Z = round(Z, 6),
         iterations = iterations,
         infeasible = FALSE

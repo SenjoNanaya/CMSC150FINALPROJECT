@@ -314,7 +314,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     
                     # show what should be
                     st.markdown("---")
-                    st.markdown("### 📥 Your Input")
+                    st.markdown("### Your Input")
                     if len(selected) == 30:
                         st.markdown("You selected **all** the possible mitigation projects")
                     else:
@@ -325,7 +325,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     
                     # SHOW ITERATIONS EVEN ON FAILURE (debug)
                     st.markdown("---")
-                    st.markdown("### 🔄 Simplex Tableau Iterations (Before Failure)")
+                    st.markdown("### Simplex Tableau Iterations (Before Failure)")
                     st.info("The solver detected infeasibility or unboundedness and stopped. Below are the iterations completed before detection.")
                     
                     if "iterations" in res and res["iterations"]:
@@ -362,7 +362,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     # final tableau                    
                     if "finalTableau" in res:
                         st.markdown("---")
-                        with st.expander("📋 Final Tableau State (At Failure Point)", expanded=False):
+                        with st.expander("Final Tableau State (At Failure Point)", expanded=False):
                             st.caption("This is the tableau when infeasibility/unboundedness was detected")
                             st.dataframe(pd.DataFrame(res["finalTableau"]))
                 else:
