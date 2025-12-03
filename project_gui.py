@@ -235,7 +235,8 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
             
             if r.status_code != 200:
                 res = r.json()
-                st.error(f"Backend error: {r.status_code} {r.text}")
+                # st.error(f"Backend error: {r.status_code} {r.text}")
+                # no need to show this anymore as it'sa developer thing on my side
                 st.error("### The problem is infeasible or unbounded.")
                 st.markdown("""
                 The selected projects cannot meet all pollution reduction targets.
