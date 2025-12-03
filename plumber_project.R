@@ -62,6 +62,39 @@ Simplex <- function(tableau, isMax = TRUE) {
         ratios <- numer / denom
         ratios[denom <= 1e-10] <- Inf  # CANT BE ZERO
 
+
+        pivotRow <- which.min(ratios)
+        pivotElement <- tableau[pivotRow, pivotCol]
+
+        tableau[pivotRow, ] <- tableau[pivotRow, ] / pivotElement
+
+        for (r in seq_len(nrows)) {
+            if (r == pivotRow){
+                next
+            }
+
+            factor <- tableau[r, pivotCol]
+            tableau[r, ] <- tableau[r, ] - factor * tableau[pivotRow, ]
+        }
+
+        iter <- iter + 1
+        cat("Iteration", iter, "\n")
+        cat("Pivot element:", round(pivotElement, 6),
+            "at row", pivotRow, "col", pivotCol, "\n")
+        print(round(tableau, 6))
+        cat("\n-------------------------------------\n")
+
+
+
+        # storing iterations to present later on the gui
+        iterations[[iter + 1]] <- list(
+            iteration = iter,
+            tableau = round(tableau, 6),
+            pivotRow = pivotRow,
+            pivotCol = pivotCol,
+            pivotElement = round(pivotElement, 6)
+        )
+        
         # check if infinite
         if (all(is.infinite(ratios))) {
             return(list(
@@ -77,33 +110,6 @@ Simplex <- function(tableau, isMax = TRUE) {
                 infeasible = TRUE
             ))
         }
-
-        pivotRow <- which.min(ratios)
-        pivotElement <- tableau[pivotRow, pivotCol]
-
-        tableau[pivotRow, ] <- tableau[pivotRow, ] / pivotElement
-
-        for (r in seq_len(nrows)) {
-            if (r == pivotRow) next
-            factor <- tableau[r, pivotCol]
-            tableau[r, ] <- tableau[r, ] - factor * tableau[pivotRow, ]
-        }
-
-        iter <- iter + 1
-        cat("Iteration", iter, "\n")
-        cat("Pivot element:", round(pivotElement, 6),
-            "at row", pivotRow, "col", pivotCol, "\n")
-        print(round(tableau, 6))
-        cat("\n-------------------------------------\n")
-
-        # storing iterations to present later on the gui
-        iterations[[iter + 1]] <- list(
-            iteration = iter,
-            tableau = round(tableau, 6),
-            pivotRow = pivotRow,
-            pivotCol = pivotCol,
-            pivotElement = round(pivotElement, 6)
-        )
     }
 
     # Z value (negate back if minimization)

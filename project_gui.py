@@ -427,7 +427,7 @@ if st.button("Calculate Optimal Mix", type="primary", disabled=(len(selected) ==
                     
                     breakdown = []
                     for i, xi in enumerate(xvals):
-                        # Only show non-zero allocations
+                        # Only show non-zero
                         if abs(xi) > 0.0001:  
                             project = sel_df.iloc[i]["projectname"]
                             cost_per_unit = sel_df.iloc[i]["cost"]
