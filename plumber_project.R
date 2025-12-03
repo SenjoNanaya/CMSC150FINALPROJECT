@@ -94,24 +94,26 @@ Simplex <- function(tableau, isMax = TRUE) {
             pivotCol = pivotCol,
             pivotElement = round(pivotElement, 6)
         )
+
+        # check if infinite
+        if (all(is.infinite(ratios))) {
+            return(list(
+                error = "Linear program is unbounded",
+                infeasible = TRUE,
+                iterations = iterations
+            ))
+        }
+
+        # check for infeasibility (negative RHS with no valid pivots)
+        if (any(numer < -1e-10) && all(ratios[numer < -1e-10] == Inf)) {
+            return(list(
+                error = "Linear program is infeasible",
+                infeasible = TRUE,
+                iterations = iterations
+            ))
+        }
     }
 
-    # check if infinite
-    if (all(is.infinite(ratios))) {
-        return(list(
-            error = "Linear program is unbounded",
-            infeasible = TRUE
-        ))
-    }
-
-    # check for infeasibility (negative RHS with no valid pivots)
-    if (any(numer < -1e-10) && all(ratios[numer < -1e-10] == Inf)) {
-        return(list(
-            error = "Linear program is infeasible",
-            infeasible = TRUE
-        ))
-    }
-    
     # Z value (negate back if minimization)
     # ^ this does not matter anymore considering that the extra logic for minimization that used to be here has been moved to the tableau construction
     # in project_gui.py
