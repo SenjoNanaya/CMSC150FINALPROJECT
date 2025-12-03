@@ -99,8 +99,8 @@ Simplex <- function(tableau, isMax = TRUE) {
         if (all(is.infinite(ratios))) {
             return(list(
                 error = "Linear program is unbounded",
-                infeasible = TRUE,
-                iterations = iterations
+                iterations = iterations,
+                infeasible = TRUE
             ))
         }
 
@@ -108,8 +108,8 @@ Simplex <- function(tableau, isMax = TRUE) {
         if (any(numer < -1e-10) && all(ratios[numer < -1e-10] == Inf)) {
             return(list(
                 error = "Linear program is infeasible",
-                infeasible = TRUE,
-                iterations = iterations
+                iterations = iterations,
+                infeasible = TRUE
             ))
         }
     }
